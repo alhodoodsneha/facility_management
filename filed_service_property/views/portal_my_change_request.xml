@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_breadcrumbs_change_request"
+              inherit_id="portal.portal_breadcrumbs"
+              name="Portal Breadcrumbs - Enquiry Request">
+
+        <xpath expr="//ol" position="inside">
+            <li t-if="page_name == 'my_change_requests'"
+                class="breadcrumb-item">
+                Enquiry Requests
+            </li>
+        </xpath>
+
+    </template>
+
+
+    <template id="portal_my_change_requests" name=" Enquiry Requests">
+        <t t-call="portal.portal_layout">
+
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Enquiry Requests</t>
+            </t>
+
+            <!-- ================= SUCCESS MESSAGE ================= -->
+            <t t-if="request.session.get('portal_success_message')">
+                <div class="alert alert-success alert-dismissible fade show mb-3"
+                     role="alert"
+                     data-portal-success-alert="1">
+                    <t t-esc="request.session.pop('portal_success_message')"/>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"></button>
+                </div>
+            </t>
+
+            <!-- No Requests -->
+            <t t-if="not requests">
+                <p class="alert alert-warning">
+                    There are currently no Change requests.
+                </p>
+            </t>
+
+            <!-- Create Button -->
+            <div class="text-end mb-3">
+                <button class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#ChangeRequestModal">
+                     Request Enquiry
+                </button>
+            </div>
+
+            <!-- ================= MODAL ================= -->
+            <div class="modal fade" id="ChangeRequestModal" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <form action="/my/change-requests/create"
+                          method="post"
+                          enctype="multipart/form-data"
+                          class="modal-content">
+
+                        <input type="hidden" name="csrf_token"
+                               t-att-value="request.csrf_token()"/>
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">New Enquiry Request</h5>
+                            <button type="button" class="btn-close"
+                                    data-bs-dismiss="modal"/>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <div class="mb-3">
+                                <label class="form-label">Request</label>
+                                <input name="name" class="form-control"
+                                       required="1"/>
+                            </div>
+                             <div class="mb-3">
+                                <label class="form-label">Property</label>
+                                <input name="property" class="form-control"
+                                       required="1"/>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Property Unit</label>
+                                  <input name="property_unit" class="form-control"
+                                       required="1"/>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Deadline</label>
+                                <input type="date"
+                                       name="deadline"
+                                       class="form-control"
+                                       required="1"/>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Request Details
+                                </label>
+                                <textarea name="note" class="form-control"/>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-bs-dismiss="modal">Cancel
+                            </button>
+                            <button type="submit"
+                                    class="btn btn-primary">Submit
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <!-- ================= TABLE ================= -->
+            <t t-if="requests" t-call="portal.portal_table">
+                <thead>
+                    <tr>
+                        <th>Sequence</th>
+                        <th>Request</th>
+                        <th>status</th>
+                        <th>Deadline</th>
+                        <th>Property</th>
+                        <th>Unit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="requests" t-as="req">
+                        <tr>
+                            <td style="word-wrap: break-word; white-space: normal;">
+                                <t t-esc="req.sequence_code"/>
+                            </td>
+                            <td style="word-wrap: break-word; white-space: normal;">
+                                <t t-esc="req.name"/>
+                            </td>
+                            <td>
+                                <span t-field="req.stage_id.name"/>
+                            </td>
+                            <td>
+                                <span t-field="req.date_deadline"/>
+                            </td>
+                            <td>
+                                <span t-field="req.property_project"/>
+                            </td>
+                            <td>
+                                <span t-field="req.property_unit"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+</odoo>

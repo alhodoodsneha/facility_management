@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="field_service_creation_form_view" model="ir.ui.view">
+        <field name="name">filed.service.create.wizard.form.view</field>
+        <field name="model">filed.service.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Field Service">
+                <group>
+                    <field name="preferable_time" required="1"/>
+                    <field name="preferable_end_time" required="1"/>
+                    <field name="user_ids" required="1" widget="many2many_tags"/>
+                </group>
+                <group>
+                    <field name="description" required="1"/>
+                </group>
+                <footer>
+                    <button name="action_add_feedback" type="object"
+                            string="Done" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_field_service_wizard" model="ir.actions.act_window">
+        <field name="name">Field Service Creation</field>
+        <field name="res_model">filed.service.create.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="field_service_creation_form_view"/>
+    </record>
+
+
+      <record id="filed_service_job_create_wizard_view" model="ir.ui.view">
+        <field name="name">filed.service.job.create.wizard.form.view</field>
+        <field name="model">filed.service.job.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Field Service job">
+                <group>
+                    <field name="preferable_time" required="1"/>
+                    <field name="preferable_end_time" required="1"/>
+                    <field name="user_id" required="1"/>
+                </group>
+                <group>
+                    <field name="description" required="1"/>
+                </group>
+                <footer>
+                    <button name="action_add_feedback" type="object"
+                            string="Done" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_filed_service_job_create_wizard" model="ir.actions.act_window">
+        <field name="name">Field Service Job Creation</field>
+        <field name="res_model">filed.service.job.create.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="filed_service_job_create_wizard_view"/>
+    </record>
+</odoo>

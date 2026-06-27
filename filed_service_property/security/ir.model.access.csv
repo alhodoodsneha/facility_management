@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_property_property,property.property,model_property_property,,1,1,1,1
+access_inspection_attachment,inspection.attachment,model_inspection_attachment,,1,1,1,1
+access_inspection_team_member,inspection.team.member,model_inspection_team_member,,1,1,1,1
+access_estimation_line,estimation.line,model_estimation_line,,1,1,1,1
+access_estimation_line_sale_order,estimation.line.sale.order,model_estimation_line_sale_order,,1,1,1,1
+access_crm_lead_inspection_user,crm.lead.inspection.user,crm.model_crm_lead,filed_service_property.group_inspection_user,1,1,1,0
+access_crm_tag_inspection_user,crm.tag.inspection.user,sales_team.model_crm_tag,filed_service_property.group_inspection_user,1,1,1,0
+access_crm_lead_inspection_manager,crm.lead.inspection.manager,crm.model_crm_lead,filed_service_property.group_inspection_manager,1,1,1,0
+access_crm_tag_inspection_manager,crm.tag.inspection.manager,sales_team.model_crm_tag,filed_service_property.group_inspection_manager,1,1,1,0
+access_project_task_sales_user,project.task.sales.user,project.model_project_task,sales_team.group_sale_salesman,1,1,1,0
+access_project_task_sales_all_leads,project.task.sales.all.leads,project.model_project_task,sales_team.group_sale_salesman_all_leads,1,1,1,0
+access_project_task_sales_manager,project.task.sales.manager,project.model_project_task,sales_team.group_sale_manager,1,1,1,0
+access_filed_service_create_wizard,filed.service.create.wizard,model_filed_service_create_wizard,,1,1,1,1
+access_filed_service_job_create_wizard,filed.service.job.create.wizard,model_filed_service_job_create_wizard,,1,1,1,1
+access_advance_invoice_wizard,advance.invoice.wizard,model_advance_invoice_wizard,,1,1,1,1
+access_project_task_material,project.task.material,model_project_task_material,,1,1,1,1

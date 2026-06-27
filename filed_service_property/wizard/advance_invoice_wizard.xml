@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      <record id="advance_invoice_wizard_form_view" model="ir.ui.view">
+        <field name="name">advance.invoice.wizard.form.view</field>
+        <field name="model">advance.invoice.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Invoice">
+                <group>
+                    <field name="project_id" readonly="1"/>
+                    <field name="balance_per" readonly="1"/>
+                    <field name="percentage"/>
+                </group>
+                <group>
+                </group>
+                <footer>
+                    <button name="action_adv_create_adv" type="object"
+                            string="Done" class="btn-primary"/>
+                    <button special="cancel" data-hotkey="z" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_advance_invoice_wizard" model="ir.actions.act_window">
+        <field name="name">Create Invoice</field>
+        <field name="res_model">advance.invoice.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="advance_invoice_wizard_form_view"/>
+    </record>
+</odoo>

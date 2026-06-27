@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="sale_order_form_view_inherited_field_service" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.field.service</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+              <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="create_pr" invisible="1"/>
+                <field name="is_other_ot_task" invisible="1"/>
+                <field name="other_one_time_prj" invisible="is_other_ot_task == False"/>
+                <field name="other_one_time_task" invisible="is_other_ot_task == False"/>
+                <field name="ins_crm_id" readonly="1"/>
+                <field name="ins_task_id" readonly="1"  invisible="job_type != 'one_time'"/>
+                <field name="estimation_total" readonly="1"  invisible="job_type != 'one_time'"/>
+                  <field name="service_task" readonly="1" invisible="job_type != 'one_time'"/>
+                <field name="job_type" readonly="state != 'draft'"/>
+            </xpath>
+             <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="property_status" readonly="state in ['sale','cancel']"/>
+                <field name="property_project" readonly="state in ['sale','cancel']"/>
+                <field name="property_id" readonly="state in ['sale','cancel']"/>
+                <field name="property_unit" readonly="state in ['sale','cancel']"/>
+                <field name="property_request" readonly="state in ['sale','cancel']"/>
+            </xpath>
+              <xpath expr="//page[@name='order_lines']" position="after">
+                <page string="Estimation Lines" name="estimation_lines"  invisible="job_type != 'one_time'">
+                    <field name="estimation_line_ids" widget="one2many">
+                        <list string="Estimation Lines"  readonly="1" create="0" delete="0">
+                            <field name="sale_order_id" column_invisible="1"/>
+                            <field name="task_id" column_invisible="1"/>
+                            <field name="description"/>
+                            <field name="qty"/>
+                            <field name="unit_price"/>
+                            <field name="line_margin"/>
+                            <field name="total" sum="Total Estimation"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+              <xpath expr="//div[@name='button_box']" position="after">
+                <widget name="web_ribbon" title="Service Created" invisible="service_type != 'service_created'"/>
+                <widget name="web_ribbon" title="Service Done" invisible="service_type != 'service_done'"/>
+                <widget name="web_ribbon" title="AMC Job Created" invisible="service_type != 'amc_job'"/>
+            </xpath>
+
+             <xpath expr="//button[@id='create_invoice']" position="attributes">
+                <attribute name="invisible">invoice_status != 'to invoice' or job_type in ['amc_work']</attribute>
+            </xpath>
+             <xpath expr="//button[@id='create_invoice_percentage']" position="attributes">
+                    <attribute name="invisible">invoice_status != 'no' or state != 'sale' or job_type in ['amc_work']</attribute>
+             </xpath>
+             <xpath expr="//button[@name='action_quotation_send']"
+                   position="after">
+                   <button name="action_create_fsm_task" string="Create Job"
+                        type="object" class="oe_highlight" data-hotkey="o"
+                        invisible="state not in ['sale'] or create_pr == True or job_type != 'one_time'"
+                />
+                  <button name="action_create_fsm_job" string="Create Job"
+                        type="object" class="oe_highlight" data-hotkey="o"
+                        invisible="state not in ['sale'] or create_pr == True or job_type != 'amc_work'"
+                />
+             </xpath>
+        </field>
+     </record>
+
+      <record id="sale_order_view_search_quotation_inherited_property_view" model="ir.ui.view">
+        <field name="name">sale.order.search.inherit.quotation.fsm</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field string="Property" name="property_id"/>
+                <field string="Property Code" name="property_id" filter_domain="[('property_id.code', 'ilike', self)]"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="sale_order_view_search_inherit_sale_fsm_property" model="ir.ui.view">
+        <field name="name">sale.order.search.inherit.fsm.property</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_sale"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field string="Property" name="property_id"/>
+                <field string="Property Code" name="property_id" filter_domain="[('property_id.code', 'ilike', self)]"/>
+            </field>
+        </field>
+    </record>
+
+     <record id="view_order_tree_inherited_fsm" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherited.fsm</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="service_type" widget="badge" decoration-success="service_type == 'service_done'"
+                       decoration-warning="service_type == 'service_created'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

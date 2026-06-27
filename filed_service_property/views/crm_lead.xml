@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="crm_lead_view_form_inherited_fsm" model="ir.ui.view">
+        <field name="name">crm.lead.view.form.inherit.fsm</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+             <xpath expr="//field[@name='name']" position="before">
+                <h1>
+                    <field name="sequence_code" readonly="1"/>
+                </h1>
+            </xpath>
+             <xpath expr="//field[@name='tag_ids']" position="after">
+                  <field name="assigned_to" invisible="1"/>
+                  <field name="job_type" />
+                  <field name="location_url" invisible="job_type != 'one_time'" />
+                  <field name="preferable_time" invisible="job_type != 'one_time'"/>
+                  <field name="preferable_end_time" invisible="job_type != 'one_time'"/>
+                  <field name="property_project" invisible="job_type not in ['one_time','amc_work']"/>
+                  <field name="property_id" invisible="job_type not in ['one_time','amc_work']"/>
+                  <field name="property_status" invisible="job_type not in ['one_time','amc_work']"/>
+                  <field name="property_unit" invisible="job_type not in ['one_time','amc_work']"/>
+                  <field name="property_request" invisible="job_type not in ['one_time','amc_work']"/>
+                  <field name="stage_type" invisible="1"/>
+             </xpath>
+                <xpath expr="//group[@name='opportunity_partner']/field[@name='lost_reason_id']" position="before">
+                 <label for="street" string="Address"/>
+                    <div class="o_address_format">
+                        <field name="street" placeholder="Street..." class="o_address_street"/>
+                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                        <field name="city" placeholder="City" class="o_address_city"/>
+                        <field name="state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                        <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                        <field name="country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                    </div>
+                </xpath>
+            <xpath expr="//widget[@name='web_ribbon']" position="after">
+                <widget name="web_ribbon" title="Under Inspection" invisible="stage_type != 'under_inspection'"/>
+                <widget name="web_ribbon" title="Quotation Created" invisible="stage_type != 'quotation_created'"/>
+                <widget name="web_ribbon" title="Field Service" invisible="stage_type != 'field_service'"/>
+                <widget name="web_ribbon" title="Service Completed" invisible="stage_type != 'service_completed'"/>
+                <widget name="web_ribbon" title="Quotation Confirmed" invisible="stage_type != 'quote_confirmed'"/>
+            </xpath>
+            <xpath expr="//button[@name='action_set_won_rainbowman']" position="after">
+                <button name="action_assign_inspection"
+                        string="Assign Inspection"
+                        type="object" class="oe_highlight"
+                        data-hotkey="o" invisible="assigned_to == True or job_type != 'one_time'"/>
+            </xpath>
+            <xpath expr="//button[@name='action_schedule_meeting']" position="after">
+                 <button name="action_open_related_inspection_task"
+                         type="object"
+                        string="Inspection Task" icon="fa-tasks"
+                        class="btn-primary"
+                />
+            </xpath>
+               <xpath expr="//button[@name='action_sale_quotations_new']"
+                   position="attributes">
+                      <attribute name="invisible">job_type in ['one_time']</attribute>
+               </xpath>
+        </field>
+     </record>
+
+     <record id="view_crm_lead_kanban_field_service" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.inherit.field.service</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='priority']" position="after">
+                <field name="job_type" invisible="1"/>
+                <field name="stage_type" invisible="1"/>
+            </xpath>
+            <xpath expr="//widget[@name='web_ribbon']" position="after">
+                <div style="float:right;">
+                    <field name="stage_type" widget="badge" decoration-success="stage_type == 'service_completed'"
+                           decoration-warning="stage_type == 'quotation_created'"
+                           decoration-info="stage_type in['under_inspection','field_service','quote_confirmed']" invisible="job_type != 'one_time' or stage_type not in['under_inspection','quotation_created','quote_confirmed','field_service','service_completed']"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

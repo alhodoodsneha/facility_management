@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_project_form_inherited_field_service" model="ir.ui.view">
+        <field name="name">project.project.form.inherit.field.service</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="is_inspection" invisible="1"/>
+                <field name="is_amc_created" invisible="1"/>
+                <field name="crm_lead_id" readonly="1" invisible="is_amc_created == False"/>
+                <field name="fsm_sale_order_id" readonly="1" invisible="is_amc_created == False"/>
+                <field name="quoted_amount" readonly="1" invisible="is_amc_created == False"/>
+                <field name="property_project" readonly="1" invisible="is_amc_created == False"/>
+                <field name="property_id" readonly="1" invisible="is_amc_created == False"/>
+                <field name="property_status" readonly="1" invisible="is_amc_created == False"/>
+                <field name="property_unit" readonly="1" invisible="is_amc_created == False"/>
+                <field name="property_request" readonly="1" invisible="is_amc_created == False"/>
+            </xpath>
+                <xpath expr="//field[@name='account_id']" position="after">
+                  <field name="warehouse_id" readonly="1"/>
+                  <field name="location_id" readonly="1"/>
+                </xpath>
+             <xpath expr="//button[@name='action_open_share_project_wizard']" position="after">
+                  <button name="action_create_invoices"
+                        string="Create Invoice"
+                          invisible="is_amc_created == False"
+                        type="object" class="btn-primary"/>
+              </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                  <field name="invoice_per" invisible="is_amc_created == False"/>
+                  <field name="balance_per" invisible="is_amc_created == False"/>
+                  <field name="invoiced_amount" invisible="is_amc_created == False"/>
+                  <field name="job_type" invisible="is_amc_created == False"/>
+            </xpath>
+             <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_view_invoices" type="object"
+                        string="Invoices"
+                        groups="account.group_account_user,account.group_account_manager"
+                        invisible="is_amc_created == False"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o">
+                </button>
+
+                  <button name="action_view_purchase" type="object"
+                        string="Purchase"
+                        groups="purchase.group_purchase_user,purchase.group_purchase_manager"
+                        invisible="is_amc_created == False"
+                        class="oe_stat_button"
+                        icon="fa-file-text">
+                </button>
+
+                    <button name="action_view_internal_transfers" type="object"
+                        string="Internal Transfer"
+                        groups="stock.group_stock_user,stock.group_stock_manager"
+                        invisible="is_amc_created == False"
+                        class="oe_stat_button"
+                          icon="fa-exchange">
+                </button>
+                     <button name="action_view_timesheet_fsm" type="object"
+                        string="TimeSheet"
+                        invisible="is_amc_created == False"
+                        class="oe_stat_button"
+                          icon="fa-clock-o">
+                </button>
+
+             </xpath>
+        </field>
+    </record>
+
+
+    <record id="project_project_action_only_fsm_job" model="ir.actions.act_window" >
+        <field name="name">Projects</field>
+        <field name="res_model">project.project</field>
+        <field name="domain">[('is_fsm', '=', True), ('is_template', '=', False),('is_amc_created','=',True)]</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="project.view_project_project_filter"/>
+        <field name="target">main</field>
+        <field name="context">{
+            'fsm_mode': True,
+            'default_is_fsm': True,
+            'default_allow_timesheets': True,
+            'default_job_type': 'amc_work',
+        }</field>
+        <field name="help" type="html">
+            <p class='o_view_nocontent_smiling_face'>No projects found. Let's create one!</p>
+            <p>Create projects to organize your tasks and define a different workflow for each project.</p>
+        </field>
+    </record>
+
+
+    <menuitem
+            name="AMC Job"
+            id="menu_view_amc_job"
+            action="project_project_action_only_fsm_job"
+            parent="industry_fsm.fsm_menu_root"
+            groups="industry_fsm.group_fsm_manager,industry_fsm.group_fsm_user"
+            sequence="18"
+    />
+
+
+
+</odoo>
